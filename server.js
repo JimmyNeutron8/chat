@@ -71,15 +71,27 @@ io.on('connection', socket => {
   });
 });
 
+// String sanitizer
+function sanitizeString(str){
+    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,'');
+    return str.trim();
+}
+
 // Chat logic
 function handleMessage (socket, message) {
+  if (message.trim() == '') {
+    return; // No message
+  }
+
+  const text = sanitizeString(message);
+
   const packet = [1];
 
   for (let i = 0; i < connected_users.length; i++) {
     if (connected_users[i].socket === socket) {
       packet.push({
         'user_id': i,
-        'message': message
+        'message': text
       });
     }
   }

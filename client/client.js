@@ -8,6 +8,7 @@ let username = "Anon";
 const send_button = document.querySelector('#send-message-button');
 const message_input = document.querySelector('#message-input');
 const user_list = document.querySelector('#user-list');
+const chat_window = document.querySelector('#chat-window');
 
 // The list of users
 const connected_users = [];
@@ -48,18 +49,61 @@ function refreshUserList () {
 }
 
 function sendMessage (message) {
-  const packet = [1, message];
+  if (message.trim() == '') {
+    return;
+  }
+
+  const packet = [1, message.trim()];
   socket.send(packet);
 }
 
 function handleMessage (message) {
   const text = connected_users[message.user_id].name + ': ' + message.message;
-  console.log(text);
+
+  const entry = document.createElement('div');
+  entry.classList.add('chat-message');
+
+  const h = document.createElement('h4');
+  h.appendChild(document.createTextNode(connected_users[message.user_id].name));
+
+  const p = document.createElement('p');
+  p.appendChild(document.createTextNode(message.message));
+
+  entry.appendChild(h);
+  entry.appendChild(p);
+  chat_window.appendChild(entry);
+
+  // Scroll to bottom if we haven't scrolled up
+  if (!scrolled_up) {
+    chat_window.scrollTop = (chat_window.scrollHeight - chat_window.offsetHeight);
+  }
 }
 
+// Has the user scrolled away from the bottom of the chat window?
+let scrolled_up = false;
+
 // Add some event listeners to the controls
-send_button.addEventListener('click', (event) => {
+send_button.addEventListener('click', event => {
   event.preventDefault();
 
   sendMessage(message_input.value);
+  message_input.value = '';
+});
+
+message_input.addEventListener('keypress', event => {
+  if (event.keyCode != 13) {
+    return;
+  }
+  event.preventDefault();
+
+  sendMessage(message_input.value);
+  message_input.value = '';
+});
+
+chat_window.addEventListener('scroll', event => {
+  if (chat_window.scrollTop === (chat_window.scrollHeight - chat_window.offsetHeight)) {
+    scrolled_up = false;
+  }else{
+    scrolled_up = true;
+  }
 });

@@ -2,17 +2,36 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversation Street</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <h1>Conversation Street</h1>
+    <div id="chat-window">
+      <div class="chat-message">
+        <h4>Rosario</h4>
+        <p>And now a recipe for delicious homemade pizza! Whatever you do do not listen to my assistant, he's crazy!</p>
+      </div>
+      <div class="chat-message">
+        <h4>Pierre</h4>
+        <p>Okay, that's enough out of you!</p>
+      </div>
+      <div class="chat-message">
+        <h4>Rosario</h4>
+        <p>He thinks I'm joking, but I'm not!</p>
+      </div>
+      <div class="chat-message">
+        <h4>Pierre</h4>
+        <p>Try one of my rolls!</p>
+      </div>
+    </div>
 
     <input type="text" name="message-input" value="" id="message-input">
     <input type="button" name="send-message-button" value="Send" id="send-message-button">
 
     <h2>Players</h2>
     <ol id="user-list">
-
     </ol>
 
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
